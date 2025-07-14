@@ -1,6 +1,6 @@
 package dev.honokai.data_integrator_backend.domain.entities;
 
-import dev.monitor.tasks.domain.enums.FileFilterType;
+import dev.honokai.data_integrator_backend.domain.enums.FileFilterType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
