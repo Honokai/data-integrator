@@ -1,13 +1,12 @@
-package dev.monitor.tasks.application.config;
+package dev.honokai.data_integrator_backend.application.configurations;
 
-import java.util.Arrays;
-import java.util.List;
-
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class CorsConfig implements CorsConfigurationSource {

@@ -1,4 +1,4 @@
-package dev.monitor.tasks.application.config;
+package dev.honokai.data_integrator_backend.application.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
