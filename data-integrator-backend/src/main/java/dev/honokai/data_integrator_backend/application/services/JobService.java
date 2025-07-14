@@ -1,13 +1,12 @@
-package dev.monitor.tasks.application.services;
+package dev.honokai.data_integrator_backend.application.services;
 
-import java.util.Optional;
-
+import dev.honokai.data_integrator_backend.domain.entities.Job;
+import dev.honokai.data_integrator_backend.domain.enums.JobStatus;
+import dev.honokai.data_integrator_backend.infrastructure.repositories.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dev.monitor.tasks.domain.entities.Job;
-import dev.monitor.tasks.domain.enums.JobStatus;
-import dev.monitor.tasks.infrastructure.repositories.JobRepository;
+import java.util.Optional;
 
 @Service
 public class JobService {

@@ -1,27 +1,26 @@
-package dev.monitor.tasks.application.services;
+package dev.honokai.data_integrator_backend.application.services;
+
+import dev.honokai.data_integrator_backend.domain.entities.Script;
+import dev.honokai.data_integrator_backend.domain.entities.Task;
+import dev.honokai.data_integrator_backend.infrastructure.repositories.TaskRepository;
+import dev.honokai.data_integrator_backend.infrastructure.services.SchedulerService;
+import dev.honokai.data_integrator_backend.infrastructure.tasksdefinition.ScanTask;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-import dev.monitor.tasks.domain.entities.Script;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import dev.monitor.tasks.domain.entities.Task;
-import dev.monitor.tasks.infrastructure.repositories.TaskRepository;
-import dev.monitor.tasks.infrastructure.services.SchedulerService;
-import dev.monitor.tasks.infrastructure.tasksdefinition.ScanTask;
-
 @Service
 public class TaskService {
-	@Autowired
-	private TaskRepository taskRepository;
+    @Autowired
+    private TaskRepository taskRepository;
 
-	@Autowired
-	private MachineService machineService;
+    @Autowired
+    private MachineService machineService;
 
-	@Autowired
-	private SchedulerService schedulerService;
+    @Autowired
+    private SchedulerService schedulerService;
 
 //	public void onApplicationStart() {
 //		List<BaseTask> tasks = taskRepository.findAllActive().stream().map(t -> new ScanTask(t))
@@ -33,38 +32,38 @@ public class TaskService {
 //		}
 //	}
 
-	public List<Task> listAll() {
-		return taskRepository.findAll();
-	}
+    public List<Task> listAll() {
+        return taskRepository.findAll();
+    }
 
-	public Task create(Task task) {
-		return taskRepository.save(task);
-	}
+    public Task create(Task task) {
+        return taskRepository.save(task);
+    }
 
-	public List<Task> listAllActive() {
-		return taskRepository.findAllActive();
-	}
+    public List<Task> listAllActive() {
+        return taskRepository.findAllActive();
+    }
 
-	public Task update(Task task) {
-		Task taskUpdated = taskRepository.save(task);
+    public Task update(Task task) {
+        Task taskUpdated = taskRepository.save(task);
 
-		if (taskUpdated.isActive()
-				&& taskUpdated.getScripts().stream().filter(Script::isActive).count() > 0) {
-			schedulerService.addScheduledTask(taskUpdated.getId(), new ScanTask(taskUpdated));
-		}
+        if (taskUpdated.isActive()
+                && taskUpdated.getScripts().stream().filter(Script::isActive).count() > 0) {
+            schedulerService.addScheduledTask(taskUpdated.getId(), new ScanTask(taskUpdated));
+        }
 
-		return taskUpdated;
-	}
+        return taskUpdated;
+    }
 
-	public boolean stop(String taskIdentifier) {
-		return schedulerService.stopScheduledTask(taskIdentifier);
-	}
+    public boolean stop(String taskIdentifier) {
+        return schedulerService.stopScheduledTask(taskIdentifier);
+    }
 
-	public List<Task> findTasksRelatedToMachine(String machineId) {
-		return taskRepository.findByMachineId(machineId);
-	}
+    public List<Task> findTasksRelatedToMachine(String machineId) {
+        return taskRepository.findByMachineId(machineId);
+    }
 
-	public Optional<Task> findById(String taskIdentifier) {
-		return taskRepository.findById(taskIdentifier);
-	}
+    public Optional<Task> findById(String taskIdentifier) {
+        return taskRepository.findById(taskIdentifier);
+    }
 }
