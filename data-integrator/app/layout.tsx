@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/global/theme-provider";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/global/app-sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +26,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased w-screen h-screen`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          // disableTransitionOnChange
+        >
+          <SidebarProvider>
+            <AppSidebar />
+            <div className="flex w-full h-full flex-col">
+              <SidebarTrigger className="cursor-pointer" />
+              {children}
+            </div>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
