@@ -1,4 +1,4 @@
-package dev.monitor.tasks.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

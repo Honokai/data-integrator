@@ -1,4 +1,4 @@
-package dev.monitor.tasks.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos;
 
 public class CodeEvaluateDto {
 	private String code;
