@@ -24,19 +24,7 @@ import {
 } from "@/components/ui/hover-card";
 import apiClient from "@/services/api/apiClient";
 import Link from "next/link";
-
-export type Task = {
-  id: string;
-  machine: string;
-  networkPath: string;
-  singleFile: boolean;
-  scanInterval: number;
-  active: boolean;
-  fileFilter: {
-    pattern: string;
-    type: string;
-  };
-};
+import { Task } from "@/lib/types";
 
 export default function MachineEdit() {
   const { machineId } = useParams<{ machineId: string }>();

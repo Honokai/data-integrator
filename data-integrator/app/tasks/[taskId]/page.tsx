@@ -1,6 +1,5 @@
 "use client";
 
-import { Task } from "@/app/machines/[machineId]/page";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,22 +33,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Script, Task } from "@/lib/types";
 import apiClient from "@/services/api/apiClient";
 
 import { BadgeQuestionMarkIcon, Check, OctagonX, PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import router from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
-type Script = {
-  id: string;
-  version: number;
-  instruction: string;
-  active: boolean;
-};
-
 export default function TaskPage() {
+  const router = useRouter();
+
   const { taskId } = useParams<{ taskId: string }>();
   const [task, setTask] = useState<Task | null>(null);
   const [scripts, setScripts] = useState<Script[]>([]);

@@ -1,6 +1,5 @@
 "use client";
 
-import { Task } from "@/app/machines/[machineId]/page";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Task } from "@/lib/types";
 
 import apiClient from "@/services/api/apiClient";
 import { useSearchParams } from "next/navigation";
