@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useParams, useRouter } from "next/navigation";
-import { BadgeQuestionMarkIcon, Check, OctagonX } from "lucide-react";
+import { BadgeQuestionMarkIcon, Check, OctagonX, PlusIcon } from "lucide-react";
 import {
   Table,
   TableHeader,
@@ -23,9 +23,11 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import apiClient from "@/services/api/apiClient";
+import Link from "next/link";
 
 export type Task = {
   id: string;
+  machine: string;
   networkPath: string;
   singleFile: boolean;
   scanInterval: number;
@@ -117,27 +119,37 @@ export default function MachineEdit() {
           className=""
         >
           <div className="flex">
-            <p className="text-2xl mb-2">Tasks related to current machine</p>
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button variant="link">
-                  <BadgeQuestionMarkIcon />
-                </Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="flex justify-between gap-4 bg-background">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">@nextjs</h4>
-                    <p className="text-sm">
-                      The React Framework – created and maintained by @vercel.
-                    </p>
-                    <div className="text-muted-foreground text-xs">
-                      Joined December 2021
+            <div className="flex flex-1 justify-between">
+              <p className="text-2xl mb-2">
+                Tasks related to current machine
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Button variant="link">
+                      <BadgeQuestionMarkIcon />
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-80">
+                    <div className="flex justify-between gap-4 bg-background">
+                      <div className="space-y-1">
+                        <h4 className="text-sm font-semibold">@nextjs</h4>
+                        <p className="text-sm">
+                          The React Framework – created and maintained by
+                          @vercel.
+                        </p>
+                        <div className="text-muted-foreground text-xs">
+                          Joined December 2021
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
+                  </HoverCardContent>
+                </HoverCard>
+              </p>
+              <Button className="p-0" asChild>
+                <Link href={`/tasks/create?machineId=${machineId}`}>
+                  <PlusIcon size={20} /> Task
+                </Link>
+              </Button>
+            </div>
           </div>
           <Table border={1} className="w-full">
             <TableCaption>All tasks related to this machine</TableCaption>
