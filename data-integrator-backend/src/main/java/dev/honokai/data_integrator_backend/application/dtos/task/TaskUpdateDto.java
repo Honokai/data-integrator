@@ -1,4 +1,4 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.task;
 
 import dev.honokai.data_integrator_backend.domain.entities.FileFilter;
 import jakarta.validation.constraints.Min;

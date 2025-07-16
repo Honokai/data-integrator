@@ -1,5 +1,6 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.machine;
 
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskResponseDto;
 import dev.honokai.data_integrator_backend.domain.entities.Machine;
 
 import java.util.Set;
