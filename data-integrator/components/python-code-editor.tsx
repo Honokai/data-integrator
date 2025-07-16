@@ -76,6 +76,7 @@ export default function PythonCodeEditor({
           <TriangleAlert size={20} /> Não é possível utilizar imports
         </p>
         <Button
+          disabled={code?.length > 0 ? false : true}
           type="button"
           variant="ghost"
           className="my-2"
