@@ -8,11 +8,22 @@ import java.util.List;
 
 public class CodeEvaluateService {
     public static String evaluateCodeSyntax(String code) {
-        List<String> cmd = Arrays.asList("python", "-c", code.replace("\"", "\"\""));
+        String baseCodeTemplateToTestCode = "compile('''USER_CODE''', 'placeHolderSystemArgs', 'exec')";
+        List<String> cmd = Arrays.asList("python", "-c", baseCodeTemplateToTestCode.replace("USER_CODE", code.replace("\"", "\"\"")));
+        return run(cmd);
+    }
 
-        ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+    public static String testCodeAgainstContent(String code, String content) {
+        String escapedContent = content.replace("\"", "\"\"");
+        List<String> cmd = Arrays.asList("python", "-c", code.replace("\"", "\"\""), escapedContent);
+        System.out.println(String.join(" ", cmd));
+        return run(cmd);
+    }
+
+    private static String run(List<String> command) {
+        ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
-        processBuilder.command(cmd);
+        processBuilder.command(command);
 
         try {
             Process process = processBuilder.start();

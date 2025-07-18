@@ -1,12 +1,11 @@
 package dev.honokai.data_integrator_backend.application.services;
 
-import dev.honokai.data_integrator_backend.application.dtos.TaskUpdateDto;
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskUpdateDto;
 import dev.honokai.data_integrator_backend.domain.entities.Script;
 import dev.honokai.data_integrator_backend.domain.entities.Task;
 import dev.honokai.data_integrator_backend.infrastructure.repositories.TaskRepository;
 import dev.honokai.data_integrator_backend.infrastructure.services.SchedulerService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,18 +13,19 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-    @Autowired
-    private TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
+    private final MachineService machineService;
+    private final SchedulerService schedulerService;
+    private final ScriptService scriptService;
 
-    @Autowired
-    private MachineService machineService;
+    public TaskService(TaskRepository taskRepository, MachineService machineService, SchedulerService schedulerService, ScriptService scriptService) {
+        this.taskRepository = taskRepository;
+        this.machineService = machineService;
+        this.schedulerService = schedulerService;
+        this.scriptService = scriptService;
+    }
 
-    @Autowired
-    private SchedulerService schedulerService;
-    @Autowired
-    private ScriptService scriptService;
-
-//	public void onApplicationStart() {
+    //	public void onApplicationStart() {
 //		List<BaseTask> tasks = taskRepository.findAllActive().stream().map(t -> new ScanTask(t))
 //				.collect(Collectors.toList());
 //

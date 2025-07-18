@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/global/theme-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/global/app-sidebar";
+import QueryClientContainer from "@/components/global/query-client-container";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,7 @@ export default function RootLayout({
             <AppSidebar />
             <div className="flex w-full h-full flex-col">
               <SidebarTrigger className="cursor-pointer" />
-              {children}
+              <QueryClientContainer>{children}</QueryClientContainer>
             </div>
           </SidebarProvider>
         </ThemeProvider>

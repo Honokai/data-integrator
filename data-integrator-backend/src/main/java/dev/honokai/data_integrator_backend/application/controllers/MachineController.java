@@ -1,14 +1,13 @@
 package dev.honokai.data_integrator_backend.application.controllers;
 
 import dev.honokai.data_integrator_backend.application.converter.GenericConverter;
-import dev.honokai.data_integrator_backend.application.dtos.MachineIndexDto;
-import dev.honokai.data_integrator_backend.application.dtos.MachinePostDto;
-import dev.honokai.data_integrator_backend.application.dtos.TaskResponseDto;
+import dev.honokai.data_integrator_backend.application.dtos.machine.MachineIndexDto;
+import dev.honokai.data_integrator_backend.application.dtos.machine.MachinePostDto;
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskResponseDto;
 import dev.honokai.data_integrator_backend.application.services.MachineService;
 import dev.honokai.data_integrator_backend.application.services.TaskService;
 import dev.honokai.data_integrator_backend.domain.entities.Machine;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +18,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/machines")
 public class MachineController {
-    @Autowired
-    private MachineService machineService;
+    private final MachineService machineService;
+    private final TaskService taskService;
 
-    @Autowired
-    private TaskService taskService;
+    public MachineController(MachineService machineService, TaskService taskService) {
+        this.machineService = machineService;
+        this.taskService = taskService;
+    }
 
     @GetMapping
     public ResponseEntity<List<MachineIndexDto>> index() {
