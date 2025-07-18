@@ -5,11 +5,14 @@ import dev.honokai.data_integrator_backend.domain.entities.Script;
 import dev.honokai.data_integrator_backend.domain.entities.Task;
 import dev.honokai.data_integrator_backend.infrastructure.repositories.TaskRepository;
 import dev.honokai.data_integrator_backend.infrastructure.services.SchedulerService;
+import dev.honokai.data_integrator_backend.infrastructure.tasksdefinition.BaseTask;
+import dev.honokai.data_integrator_backend.infrastructure.tasksdefinition.ScanTask;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -25,15 +28,15 @@ public class TaskService {
         this.scriptService = scriptService;
     }
 
-    //	public void onApplicationStart() {
-//		List<BaseTask> tasks = taskRepository.findAllActive().stream().map(t -> new ScanTask(t))
-//				.collect(Collectors.toList());
-//
-//		for (int index = 0; index < tasks.size(); index++) {
-//			BaseTask scheduledTask = tasks.get(index);
-//			schedulerService.addScheduledTask(scheduledTask.getTask().getId(), scheduledTask);
-//		}
-//	}
+    public void onApplicationStart() {
+        List<BaseTask> tasks = taskRepository.findAllActive().stream().map(t -> new ScanTask(t))
+                .collect(Collectors.toList());
+
+        for (int index = 0; index < tasks.size(); index++) {
+            BaseTask scheduledTask = tasks.get(index);
+            schedulerService.addScheduledTask(scheduledTask.getTask().getId(), scheduledTask);
+        }
+    }
 
     public List<Task> listAll() {
         return taskRepository.findAll();
