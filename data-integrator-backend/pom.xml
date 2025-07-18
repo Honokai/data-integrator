@@ -10,7 +10,7 @@
     </parent>
     <groupId>dev.honokai</groupId>
     <artifactId>data-integrator-backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <name>data-integrator-backend</name>
     <description>System to integrate data between systems</description>
     <url/>

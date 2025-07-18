@@ -28,12 +28,12 @@ public class TaskService {
         this.scriptService = scriptService;
     }
 
-    public void onApplicationStart() {
-        List<BaseTask> tasks = taskRepository.findByTaskActiveTrueAndScriptActiveTrue().stream().map(t -> new ScanTask(t))
+    public void registerTasksToRun() {
+        List<BaseTask> tasksEligibleToBeRun = taskRepository.findByTaskActiveTrueAndScriptActiveTrue().stream().map(ScanTask::new)
                 .collect(Collectors.toList());
 
-        for (int index = 0; index < tasks.size(); index++) {
-            BaseTask scheduledTask = tasks.get(index);
+        for (int index = 0; index < tasksEligibleToBeRun.size(); index++) {
+            BaseTask scheduledTask = tasksEligibleToBeRun.get(index);
             schedulerService.addScheduledTask(scheduledTask.getTask().getId(), scheduledTask);
         }
     }
