@@ -29,7 +29,7 @@ public class TaskService {
     }
 
     public void onApplicationStart() {
-        List<BaseTask> tasks = taskRepository.findAllActive().stream().map(t -> new ScanTask(t))
+        List<BaseTask> tasks = taskRepository.findByTaskActiveTrueAndScriptActiveTrue().stream().map(t -> new ScanTask(t))
                 .collect(Collectors.toList());
 
         for (int index = 0; index < tasks.size(); index++) {
