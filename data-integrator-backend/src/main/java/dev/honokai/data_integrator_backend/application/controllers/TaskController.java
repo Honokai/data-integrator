@@ -1,16 +1,15 @@
 package dev.honokai.data_integrator_backend.application.controllers;
 
-import dev.honokai.data_integrator_backend.application.dtos.ScriptResponseDto;
-import dev.honokai.data_integrator_backend.application.dtos.TaskCreateDto;
-import dev.honokai.data_integrator_backend.application.dtos.TaskResponseDto;
-import dev.honokai.data_integrator_backend.application.dtos.TaskUpdateDto;
+import dev.honokai.data_integrator_backend.application.dtos.script.ScriptResponseDto;
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskCreateDto;
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskResponseDto;
+import dev.honokai.data_integrator_backend.application.dtos.task.TaskUpdateDto;
 import dev.honokai.data_integrator_backend.application.services.MachineService;
 import dev.honokai.data_integrator_backend.application.services.TaskService;
 import dev.honokai.data_integrator_backend.domain.entities.Machine;
 import dev.honokai.data_integrator_backend.domain.entities.Task;
 import dev.honokai.data_integrator_backend.infrastructure.services.SchedulerService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +20,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
-    @Autowired
-    private TaskService taskService;
+    private final TaskService taskService;
+    private final MachineService machineService;
+    private final SchedulerService schedulerService;
 
-    @Autowired
-    private MachineService machineService;
-
-    @Autowired
-    private SchedulerService schedulerService;
+    public TaskController(TaskService taskService, MachineService machineService, SchedulerService schedulerService) {
+        this.taskService = taskService;
+        this.machineService = machineService;
+        this.schedulerService = schedulerService;
+    }
 
     @GetMapping
     public ResponseEntity<List<TaskCreateDto>> index() {
