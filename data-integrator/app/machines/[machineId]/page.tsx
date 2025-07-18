@@ -22,21 +22,12 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import apiClient from "@/services/api/apiClient";
 import Link from "next/link";
-
-export type Task = {
-  id: string;
-  machine: string;
-  networkPath: string;
-  singleFile: boolean;
-  scanInterval: number;
-  active: boolean;
-  fileFilter: {
-    pattern: string;
-    type: string;
-  };
-};
+import { Task } from "@/lib/types";
+import {
+  getMachineData,
+  listTasksRelatedToMachine,
+} from "@/services/api/endpoints/machine";
 
 export default function MachineEdit() {
   const { machineId } = useParams<{ machineId: string }>();
@@ -44,27 +35,25 @@ export default function MachineEdit() {
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const router = useRouter();
 
-  const fetchMachineData = async () => {
-    const { data } = await apiClient.get(`/machines/${machineId}`);
+  const resolvePageData = async () => {
+    const machineData = await getMachineData(machineId);
+    const taskList = await listTasksRelatedToMachine(machineId);
 
-    if (data != null) {
-      setMachine(data);
-    } else {
-      console.error("Error fetching machine data");
+    if (machineData.data != null) {
+      setMachine(machineData.data);
+    }
+
+    if (taskList.data != null) {
+      setTasks(taskList.data);
     }
   };
 
-  const fetchTasksRelatedToMachine = async () => {
-    const { data } = await apiClient.get(`/machines/${machineId}/tasks`);
-
-    if (data != null) {
-      setTasks(data);
-    }
-  };
+  const onFormSubmit = async () => {
+    
+  }
 
   useEffect(() => {
-    fetchMachineData();
-    fetchTasksRelatedToMachine();
+    resolvePageData();
   }, [machineId]);
 
   if (!machine) return <p>Loading machine data...</p>;

@@ -1,4 +1,4 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.machine;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

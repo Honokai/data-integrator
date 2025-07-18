@@ -1,41 +1,37 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.task;
 
 import dev.honokai.data_integrator_backend.domain.entities.FileFilter;
-import dev.honokai.data_integrator_backend.domain.entities.Task;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-public class TaskResponseDto {
+public class TaskUpdateDto {
+    @NotNull
     private String id;
 
+    @NotBlank
     private String networkPath;
 
-    private boolean singleFile = false;
+    @Min(value = 5L)
+    private int scanInterval;
 
-    private int scanInterval = 0;
+    private boolean singleFile;
 
     private boolean active;
 
+    @NotNull
     private FileFilter fileFilter;
 
-    public TaskResponseDto() {
-        // TODO Auto-generated constructor stub
-    }
-
-    public TaskResponseDto(Task task) {
-        this.id = task.getId();
-        this.networkPath = task.getNetworkPath();
-        this.active = task.isActive();
-        this.scanInterval = task.getScanInterval();
-        this.fileFilter = task.getFileFilter();
-        this.singleFile = task.isSingleFile();
-    }
-
-    public TaskResponseDto(String id, String networkPath, boolean singleFile, int scanInterval, boolean active, FileFilter fileFilter) {
+    public TaskUpdateDto(String id, String networkPath, int scanInterval, boolean singleFile, boolean active, FileFilter fileFilter) {
         this.id = id;
         this.networkPath = networkPath;
-        this.singleFile = singleFile;
         this.scanInterval = scanInterval;
+        this.singleFile = singleFile;
         this.active = active;
         this.fileFilter = fileFilter;
+    }
+
+    public TaskUpdateDto() {
     }
 
     public String getId() {
@@ -54,20 +50,20 @@ public class TaskResponseDto {
         this.networkPath = networkPath;
     }
 
-    public boolean isSingleFile() {
-        return singleFile;
-    }
-
-    public void setSingleFile(boolean singleFile) {
-        this.singleFile = singleFile;
-    }
-
     public int getScanInterval() {
         return scanInterval;
     }
 
     public void setScanInterval(int scanInterval) {
         this.scanInterval = scanInterval;
+    }
+
+    public boolean isSingleFile() {
+        return singleFile;
+    }
+
+    public void setSingleFile(boolean singleFile) {
+        this.singleFile = singleFile;
     }
 
     public boolean isActive() {

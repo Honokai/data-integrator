@@ -1,4 +1,4 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.script;
 
 import dev.honokai.data_integrator_backend.domain.entities.Script;
 
@@ -12,6 +12,8 @@ public class ScriptResponseDto {
 
     private boolean active;
 
+    private String task;
+
     public ScriptResponseDto() {
     }
 
@@ -20,6 +22,7 @@ public class ScriptResponseDto {
         this.version = script.getVersion();
         this.instruction = script.getInstruction();
         this.active = script.isActive();
+        this.task = script.getTask().getId();
     }
 
     public String getId() {
@@ -52,5 +55,13 @@ public class ScriptResponseDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
     }
 }

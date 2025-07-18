@@ -1,37 +1,41 @@
-package dev.honokai.data_integrator_backend.application.dtos;
+package dev.honokai.data_integrator_backend.application.dtos.task;
 
 import dev.honokai.data_integrator_backend.domain.entities.FileFilter;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import dev.honokai.data_integrator_backend.domain.entities.Task;
 
-public class TaskUpdateDto {
-    @NotNull
+public class TaskResponseDto {
     private String id;
 
-    @NotBlank
     private String networkPath;
 
-    @Min(value = 5L)
-    private int scanInterval;
+    private boolean singleFile = false;
 
-    private boolean singleFile;
+    private int scanInterval = 0;
 
     private boolean active;
 
-    @NotNull
     private FileFilter fileFilter;
 
-    public TaskUpdateDto(String id, String networkPath, int scanInterval, boolean singleFile, boolean active, FileFilter fileFilter) {
-        this.id = id;
-        this.networkPath = networkPath;
-        this.scanInterval = scanInterval;
-        this.singleFile = singleFile;
-        this.active = active;
-        this.fileFilter = fileFilter;
+    public TaskResponseDto() {
+        // TODO Auto-generated constructor stub
     }
 
-    public TaskUpdateDto() {
+    public TaskResponseDto(Task task) {
+        this.id = task.getId();
+        this.networkPath = task.getNetworkPath();
+        this.active = task.isActive();
+        this.scanInterval = task.getScanInterval();
+        this.fileFilter = task.getFileFilter();
+        this.singleFile = task.isSingleFile();
+    }
+
+    public TaskResponseDto(String id, String networkPath, boolean singleFile, int scanInterval, boolean active, FileFilter fileFilter) {
+        this.id = id;
+        this.networkPath = networkPath;
+        this.singleFile = singleFile;
+        this.scanInterval = scanInterval;
+        this.active = active;
+        this.fileFilter = fileFilter;
     }
 
     public String getId() {
@@ -50,20 +54,20 @@ public class TaskUpdateDto {
         this.networkPath = networkPath;
     }
 
-    public int getScanInterval() {
-        return scanInterval;
-    }
-
-    public void setScanInterval(int scanInterval) {
-        this.scanInterval = scanInterval;
-    }
-
     public boolean isSingleFile() {
         return singleFile;
     }
 
     public void setSingleFile(boolean singleFile) {
         this.singleFile = singleFile;
+    }
+
+    public int getScanInterval() {
+        return scanInterval;
+    }
+
+    public void setScanInterval(int scanInterval) {
+        this.scanInterval = scanInterval;
     }
 
     public boolean isActive() {
