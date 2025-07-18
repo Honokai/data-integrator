@@ -3,6 +3,7 @@ export type Script = {
   version: number;
   instruction: string;
   active: boolean;
+  task: string;
 };
 
 export type Task = {

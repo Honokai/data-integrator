@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -125,7 +126,7 @@ export default function TaskPage() {
                     </div>
                     <div className="col-auto">
                       <Label className="mb-2" htmlFor="filterPattern">
-                        Filter
+                        Text (pattern)
                       </Label>
                       <Input
                         id="filterPattern"
@@ -144,7 +145,7 @@ export default function TaskPage() {
                     </div>
                     <div className="col-auto">
                       <Label className="mb-2" htmlFor="filterType">
-                        Filter
+                        Filter Type
                       </Label>
                       <Select
                         name="filterType"
@@ -159,7 +160,7 @@ export default function TaskPage() {
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Theme" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent id="filterType">
                           {filterTypes.map((type) => (
                             <SelectItem key={type} value={type}>
                               {type}
@@ -180,28 +181,14 @@ export default function TaskPage() {
                         type="number"
                         min={5}
                         value={task.scanInterval}
-                        onChange={(e) =>
-                          setTask({
-                            ...task,
-                            scanInterval: parseInt(e.target.value, 10),
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <Label htmlFor="active" className="mb-5">
-                        Active
-                      </Label>
-                      <Checkbox
-                        id="active"
-                        name="active"
-                        checked={task.active}
-                        onCheckedChange={(checked) =>
-                          setTask({
-                            ...task,
-                            active: checked as boolean,
-                          })
-                        }
+                        onChange={(e) => {
+                          if (!isNaN(Number(e.target.value))) {
+                            setTask({
+                              ...task,
+                              scanInterval: parseInt(e.target.value, 10),
+                            });
+                          }
+                        }}
                       />
                     </div>
                     <div className="flex flex-col items-center">
@@ -216,6 +203,22 @@ export default function TaskPage() {
                           setTask({
                             ...task,
                             singleFile: checked as boolean,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col items-center">
+                      <Label htmlFor="active" className="mb-5">
+                        Active
+                      </Label>
+                      <Switch
+                        id="active"
+                        name="active"
+                        checked={task.active}
+                        onCheckedChange={(checked) =>
+                          setTask({
+                            ...task,
+                            active: checked as boolean,
                           })
                         }
                       />
@@ -264,7 +267,7 @@ export default function TaskPage() {
                   </HoverCard>
                 </p>
                 <Button className="p-0" asChild>
-                  <Link href={`/tasks/create?taskId=${taskId}`}>
+                  <Link href={`/scripts/create?task=${taskId}`}>
                     <PlusIcon size={20} /> Script
                   </Link>
                 </Button>
