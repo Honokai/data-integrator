@@ -14,9 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { useScript } from "@/hooks/script/useScript";
+import useUpdateScript from "@/hooks/script/useUpdateScript";
 import { Script } from "@/lib/types";
 import apiClient from "@/services/api/apiClient";
-import { updateScript } from "@/services/api/endpoints/script";
 import { ViewUpdate } from "@codemirror/view";
 import { CopyIcon, FileTerminalIcon, SaveIcon, Terminal } from "lucide-react";
 import Link from "next/link";
@@ -25,8 +26,9 @@ import React, { useEffect, useMemo, useState } from "react";
 
 export default function ScriptsShowPage() {
   const { scriptId } = useParams<{ scriptId: string }>();
-  const [script, setScript] = useState<Script | null>(null);
+  const updateScript = useUpdateScript(scriptId);
   const [textAreaValue, setTextAreaValue] = React.useState<string>("");
+
   const [testCodeStatus, setTestCodeStatus] = React.useState<{
     state: null | "success" | "error";
     message: string;
@@ -35,29 +37,19 @@ export default function ScriptsShowPage() {
     message: "",
   });
 
-  const onChangeCode = React.useCallback(
-    (val: string, viewUpdate: ViewUpdate) => {
-      setScript({
-        ...script,
-        instruction: val,
-      });
-    },
-    [script]
-  );
-
-  const fetchScriptData = async () => {
-    const { data, status } = await apiClient.get(`/scripts/${scriptId}`);
-    if (status == 200 && data != null) {
-      setScript(data);
-    }
-  };
+  const {
+    data: script,
+    isLoading: loadingScript,
+    isError: errorScript,
+    error: scriptError,
+  } = useScript(scriptId);
 
   async function testCode() {
     const { data, status } = await apiClient.post<{
       state: string;
       message: string;
     }>(`/scripts/test`, {
-      code: script?.instruction,
+      code: localScript?.instruction,
       contentToTestAgainst: textAreaValue,
     });
 
@@ -78,25 +70,40 @@ export default function ScriptsShowPage() {
 
   const onFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { data, status } = await updateScript(script);
-    if (data != null) {
-      alert("Script atualizado");
+    if (localScript) {
+      updateScript.mutate(localScript);
     }
   };
 
-  useEffect(() => {
-    fetchScriptData();
-  }, [scriptId]);
+  const [localScript, setLocalScript] = useState<Script | null>(null);
+
+  const onChangeCode = React.useCallback(
+    (val: string, viewUpdate: ViewUpdate) => {
+      if (localScript) {
+        setLocalScript({
+          ...localScript,
+          instruction: val,
+        });
+      }
+    },
+    [localScript]
+  );
 
   const memoizedCodeEditor = useMemo(() => {
     return (
       <PythonCodeEditor
         className="mt-4 flex-1 border-2 border-solid rounded-2xl overflow-hidden h-96"
-        code={script?.instruction ?? ""}
+        code={localScript?.instruction ?? ""}
         onChange={onChangeCode}
       />
     );
-  }, [script, onChangeCode]);
+  }, [localScript, onChangeCode]);
+
+  useEffect(() => {
+    if (script) {
+      setLocalScript(script);
+    }
+  }, [script]);
 
   return (
     <main className="flex-1 container mx-auto pt-6">
@@ -111,13 +118,13 @@ export default function ScriptsShowPage() {
             </Button>
           </CardTitle>
           <CardDescription className="text-muted-foreground flex justify-between">
-            <span>Id: {script?.id}</span>
-            <span>Version: {script?.version}</span>
+            <span>Id: {localScript?.id}</span>
+            <span>Version: {localScript?.version}</span>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <section title="Script editable details">
-            {script != null ? (
+            {localScript != null ? (
               <form action="#" onSubmit={onFormSubmit}>
                 <div className="grid grid-cols-3 gap-5">
                   <div className="w-fit">
@@ -129,7 +136,7 @@ export default function ScriptsShowPage() {
                       name="version"
                       readOnly
                       disabled
-                      value={script?.version ?? "Loading..."}
+                      value={localScript?.version ?? "Loading..."}
                       className="cursor-not-allowed"
                     />
                   </div>
@@ -141,9 +148,12 @@ export default function ScriptsShowPage() {
                       id="active"
                       name="active"
                       className="cursor-pointer"
-                      checked={script?.active}
+                      checked={localScript?.active || false}
                       onCheckedChange={(checked) => {
-                        setScript({ ...script, active: checked as boolean });
+                        setLocalScript({
+                          ...localScript!,
+                          active: checked as boolean,
+                        });
                       }}
                     />
                   </div>
