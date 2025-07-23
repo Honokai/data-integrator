@@ -14,7 +14,7 @@ public class FileForProcessingConsumer {
     @Autowired
     private FileProcessorService fileProcessorService;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @RabbitListener(queues = {
             "file-for-processing"}, containerFactory = "rabbitListenerContainerFactory", ackMode = "MANUAL")

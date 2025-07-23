@@ -30,7 +30,6 @@ public class CodeRunnerService {
 
             process.waitFor();
 
-            System.out.println(output.toString());
 
             return output.toString();
         } catch (Exception e) {

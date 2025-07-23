@@ -3,38 +3,45 @@ package dev.honokai.data_integrator_backend.application.services;
 import dev.honokai.data_integrator_backend.application.dtos.task.TaskUpdateDto;
 import dev.honokai.data_integrator_backend.domain.entities.Script;
 import dev.honokai.data_integrator_backend.domain.entities.Task;
+import dev.honokai.data_integrator_backend.domain.interfaces.FileSourceStrategy;
 import dev.honokai.data_integrator_backend.infrastructure.repositories.TaskRepository;
 import dev.honokai.data_integrator_backend.infrastructure.services.SchedulerService;
-import dev.honokai.data_integrator_backend.infrastructure.tasksdefinition.BaseTask;
 import dev.honokai.data_integrator_backend.infrastructure.tasksdefinition.ScanTask;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final MachineService machineService;
     private final SchedulerService schedulerService;
     private final ScriptService scriptService;
+    private final ApplicationContext context;
+    private final FileSourceStrategyResolver strategyResolver;
 
-    public TaskService(TaskRepository taskRepository, MachineService machineService, SchedulerService schedulerService, ScriptService scriptService) {
+    public TaskService(TaskRepository taskRepository, SchedulerService schedulerService, ScriptService scriptService, ApplicationContext context, FileSourceStrategyResolver strategyResolver) {
         this.taskRepository = taskRepository;
-        this.machineService = machineService;
         this.schedulerService = schedulerService;
         this.scriptService = scriptService;
+        this.context = context;
+        this.strategyResolver = strategyResolver;
     }
 
     public void registerTasksToRun() {
-        List<BaseTask> tasksEligibleToBeRun = taskRepository.findByTaskActiveTrueAndScriptActiveTrue().stream().map(ScanTask::new)
-                .collect(Collectors.toList());
+        List<Task> tasksEligibleToBeRun = taskRepository.findByTaskActiveTrueAndScriptActiveTrue();
 
-        for (int index = 0; index < tasksEligibleToBeRun.size(); index++) {
-            BaseTask scheduledTask = tasksEligibleToBeRun.get(index);
-            schedulerService.addScheduledTask(scheduledTask.getTask().getId(), scheduledTask);
+        for (Task task : tasksEligibleToBeRun) {
+            FileSourceStrategy strategy = strategyResolver.getStrategy(task.getSourceType());
+
+            ScanTask scheduledTask = context.getBean(ScanTask.class);
+
+            scheduledTask.setTask(task);
+            scheduledTask.setStrategy(strategy);
+
+            schedulerService.addScheduledTask(task.getId(), scheduledTask);
         }
     }
 
