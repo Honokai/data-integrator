@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, String> {
     @Query("select t from Task t where t.active = true")
-    public List<Task> findAllActive();
+    List<Task> findAllActive();
 
-    public List<Task> findByMachineId(String machineId);
+    List<Task> findByMachineId(String machineId);
 
     @Query("select t from Task t join Script s on s.task.id = t.id where t.active = true and s.active = true")
-    public List<Task> findByTaskActiveTrueAndScriptActiveTrue();
+    List<Task> findByTaskActiveTrueAndScriptActiveTrue();
 }
