@@ -4,54 +4,62 @@ import dev.honokai.data_integrator_backend.application.services.JobService;
 import dev.honokai.data_integrator_backend.domain.entities.Job;
 import dev.honokai.data_integrator_backend.domain.entities.Task;
 import dev.honokai.data_integrator_backend.domain.events.FileFoundForProcessingEvent;
-import org.springframework.beans.factory.annotation.Autowired;
+import dev.honokai.data_integrator_backend.domain.interfaces.FileSourceStrategy;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Component
+@Scope("prototype")
 public class ScanTask extends BaseTask {
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ApplicationEventPublisher publisher;
+    private final JobService jobService;
+    private FileSourceStrategy strategy;
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
-
-    @Autowired
-    private JobService jobService;
-
-    public ScanTask(Task task) {
-        super(task);
+    public ScanTask(RedisTemplate<String, Object> redisTemplate, ApplicationEventPublisher publisher, JobService jobService) {
+        this.redisTemplate = redisTemplate;
+        this.publisher = publisher;
+        this.jobService = jobService;
     }
 
-    public ScanTask() {
+    public FileSourceStrategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(FileSourceStrategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override
     public void run() {
         Task task = getTask();
+
+        List<File> files = strategy.findFiles(task);
+
+        if (files == null || files.isEmpty()) {
+            return;
+        }
+
         String machineName = task.getMachine().getName();
 
         String fullPath = String.format("\\\\%s\\%s", machineName, task.getNetworkPath());
 
         System.out.printf("Machine: %s | Path: %s | RUN: %s%n", machineName, fullPath, new Date());
 
-        var files = new File(fullPath).listFiles();
+        for (File file : files) {
+            String keyName = String.format("%s-%s", task.getId(), file.getAbsolutePath());
 
-        if (files == null)
-            return;
-
-        for (int index = 0; index < files.length; index++) {
-            String keyName = String.format("%s-%s", task.getId(), files[index].getAbsolutePath());
-
-            if (files[index].isFile()) {
+            if (file.isFile()) {
                 if (redisTemplate.opsForValue().get(keyName) == null) {
-                    redisTemplate.opsForValue().set(keyName, files[index].getAbsolutePath());
-                    Job job = new Job(task, files[index].getPath(), "T");
+                    redisTemplate.opsForValue().set(keyName, file.getAbsolutePath());
+                    Job job = new Job(task, file.getPath(), "T");
 
                     try {
                         job = jobService.create(job);
@@ -62,9 +70,8 @@ public class ScanTask extends BaseTask {
                     publisher.publishEvent(new FileFoundForProcessingEvent(this, job));
                 }
 
-                System.out.printf("%s - %s - %s%n", task.getMachine().getName(), files[index].getName(), new Date());
+                System.out.printf("%s - %s - %s%n", task.getMachine().getName(), file.getName(), new Date());
             }
         }
-
     }
 }
