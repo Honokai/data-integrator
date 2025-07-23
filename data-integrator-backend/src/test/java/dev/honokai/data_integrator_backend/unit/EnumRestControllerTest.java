@@ -25,15 +25,17 @@ public class EnumRestControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void givenRequestForFileFilterTypes_whenRetrievingValues_thenReturnArrayWithStringValues() throws Exception {
+    void givenFileFilterEnum_whenRetrievingValues_thenReturnArrayWithStringValues() throws Exception {
         mockMvc.perform(get(URI.create("/api/enums/file-filter-types")).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(
-                        jsonPath("$[*]").value(containsInAnyOrder(Stream.of(FileFilterType.values()).map(Enum::name).toArray())));
+                        jsonPath("$[*]")
+                                .value(containsInAnyOrder(Stream.of(FileFilterType.values()).map(Enum::name).toArray()))
+                );
     }
 
     @Test
-    void givenRequestForSourceTypes_whenRetrievingValues_thenReturnArrayWithStringValues() throws Exception {
+    void givenSourceTypesEnum_whenRetrievingValues_thenReturnArrayWithStringValues() throws Exception {
         mockMvc.perform(get(URI.create("/api/enums/file-source-types")).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(
