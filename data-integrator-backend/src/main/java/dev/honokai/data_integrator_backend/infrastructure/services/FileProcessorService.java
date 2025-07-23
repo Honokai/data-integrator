@@ -6,7 +6,9 @@ import dev.honokai.data_integrator_backend.application.services.TaskService;
 import dev.honokai.data_integrator_backend.domain.entities.Job;
 import dev.honokai.data_integrator_backend.domain.entities.Script;
 import dev.honokai.data_integrator_backend.domain.enums.JobStatus;
+import dev.honokai.data_integrator_backend.domain.events.FileProcessedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -23,6 +25,8 @@ public class FileProcessorService {
     private JobService jobService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     @Autowired
     private ScriptService scriptService;
@@ -64,6 +68,8 @@ public class FileProcessorService {
         job.get().setStatus(JobStatus.COMPLETED);
 
         jobService.updateJob(job.get());
+
+        done(job.get());
     }
 
     private String createProcessedFolder(String file) {
@@ -74,5 +80,9 @@ public class FileProcessorService {
         }
 
         return processedFolder.getAbsolutePath();
+    }
+
+    private void done(Job job) {
+        publisher.publishEvent(new FileProcessedEvent(job));
     }
 }

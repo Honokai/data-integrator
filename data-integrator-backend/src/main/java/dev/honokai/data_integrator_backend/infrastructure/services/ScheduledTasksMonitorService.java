@@ -8,7 +8,7 @@ import java.util.concurrent.ScheduledFuture;
 
 @Service
 public class ScheduledTasksMonitorService {
-    private Map<String, ScheduledFuture<?>> runningTasks = new ConcurrentHashMap<>();
+    private final Map<String, ScheduledFuture<?>> runningTasks = new ConcurrentHashMap<>();
 
     public void addScheduledTask(String taskIdentifier, ScheduledFuture<?> scheduledTask) {
         this.runningTasks.put(taskIdentifier, scheduledTask);
