@@ -1,5 +1,6 @@
-package dev.honokai.data_integrator_backend.domain.entities;
+package dev.honokai.data_integrator_backend.infrastructure.filesources;
 
+import dev.honokai.data_integrator_backend.domain.entities.Task;
 import dev.honokai.data_integrator_backend.domain.enums.SourceType;
 import dev.honokai.data_integrator_backend.domain.interfaces.FileSourceStrategy;
 import org.springframework.stereotype.Component;
