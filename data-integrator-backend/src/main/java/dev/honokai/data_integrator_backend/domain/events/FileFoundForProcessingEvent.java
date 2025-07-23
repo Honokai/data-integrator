@@ -13,9 +13,8 @@ public class FileFoundForProcessingEvent extends ApplicationEvent {
     }
 
     public JobForQueue getJob() {
-        System.out.println("evento disparado");
-        JobForQueue queueJob = new JobForQueue(this.job.getId(), this.job.getTask().getId(), this.job.getPath());
-
-        return queueJob;
+        System.out.printf("%s disparado", this.getClass().getSimpleName());
+        
+        return new JobForQueue(this.job.getId(), this.job.getTask().getId(), this.job.getPath());
     }
 }
