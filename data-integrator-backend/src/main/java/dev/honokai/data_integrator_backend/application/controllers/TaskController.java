@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -39,9 +38,9 @@ public class TaskController {
     @PostMapping
     // @todo refatorar, controller está sabendo de mais da implementação
     public ResponseEntity<Task> create(@RequestBody TaskCreateDto taskToCreate) {
-        Optional<Machine> machine = machineService.listOne(taskToCreate.getMachine());
-        System.out.println(machine.isPresent());
-        Task taskCreated = taskService.create(new Task(machine.get(), taskToCreate.getNetworkPath(),
+        Machine machine = machineService.listOne(taskToCreate.getMachine());
+
+        Task taskCreated = taskService.create(new Task(machine, taskToCreate.getNetworkPath(),
                 taskToCreate.getScanInterval(), taskToCreate.isSingleFile(), taskToCreate.isActive(), taskToCreate.getFileFilter()));
 
         return ResponseEntity.ok(taskCreated);

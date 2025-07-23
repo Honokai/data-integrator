@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,12 +33,11 @@ public class MachineController {
 
     @GetMapping("/{machineId}")
     public ResponseEntity<MachineIndexDto> edit(@PathVariable(name = "machineId") String machineId) {
-        Optional<Machine> machine = machineService.listOne(machineId);
+        Machine machine = machineService.listOne(machineId);
 
-        System.out.println(machine.get());
+        System.out.println(machine);
 
-        return machine.map(m -> ResponseEntity.ok(new MachineIndexDto(m))).orElse(ResponseEntity.notFound().build());
-//		return ResponseEntity.ok(machineService.listOne(machineId));
+        return ResponseEntity.ok(new MachineIndexDto(machine));
     }
 
     @PostMapping

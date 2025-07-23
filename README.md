@@ -1,12 +1,6 @@
-Com certeza\! Baseado em toda a nossa conversa, preparei uma proposta de `README.md` para o seu projeto.
+# Data Integrator
 
-Este README foi projetado para ser o cartão de visitas do seu repositório (no GitHub, GitLab, etc.), explicando de forma clara e profissional o que é o projeto, para quem ele se destina e como ele funciona tecnicamente. Use-o como um ponto de partida e sinta-se à vontade para adaptar.
-
----
-
-# OrquestraFlow
-
-**OrquestraFlow é uma plataforma de integração e automação de fluxos de trabalho projetada para ser flexível, segura e escalável. Conecte sistemas, processe dados e automatize tarefas complexas com o poder do Python em um ambiente totalmente gerenciado e containerizado.**
+**Data Integrator é uma plataforma de integração e automação de fluxos de trabalho projetada para ser flexível, segura e escalável. Conecte sistemas, processe dados e automatize tarefas complexas com o poder do Python em um ambiente totalmente gerenciado e containerizado.**
 
 ---
 
@@ -31,7 +25,7 @@ Nossa missão é **democratizar a criação de integrações e a automação de 
 
 Em muitos ambientes corporativos, a tarefa de extrair dados de um sistema (como um diretório de rede), transformá-los e carregá-los em outro (via API, por exemplo) é um processo manual, propenso a erros e que consome tempo.
 
-O OrquestraFlow visa resolver esse problema fornecendo uma plataforma centralizada onde um usuário pode:
+O Data Integrator visa resolver esse problema fornecendo uma plataforma centralizada onde um usuário pode:
 
 1.  Configurar uma **fonte de dados** (ex: um diretório de rede em um servidor).
 2.  Criar uma **tarefa** para ser executada sob demanda ou de forma agendada.
@@ -63,7 +57,7 @@ _EM CONSTRUCAO_
 2.  **Backend (Orquestrador):** Uma aplicação **Spring Boot** que serve a API principal, gerencia a lógica de negócio, e o mais importante, atua como um orquestrador que se comunica com a API do Kubernetes para criar contêineres de tarefas.
 3.  **Banco de Dados:** Uma instância do **PostgreSQL** para persistir todas as configurações, scripts, usuários e logs de execução.
 4.  **Camada de Execução (Workers):** Contêineres **Docker** efêmeros, gerenciados como `Jobs` do **Kubernetes**. Cada `Job` contém o ambiente Python necessário e o script do usuário para executar uma única tarefa.
-5.  **Conectividade:** A conexão entre a infraestrutura do OrquestraFlow e os diretórios de rede dos clientes é estabelecida através de métodos seguros como **VPNs Site-to-Site** ou **SFTP**, garantindo que os dados trafeguem de forma criptografada e segura.
+5.  **Conectividade:** A conexão entre a infraestrutura do Data Integrator e os diretórios de rede dos clientes é estabelecida através de métodos seguros como **VPNs Site-to-Site** ou **SFTP**, garantindo que os dados trafeguem de forma criptografada e segura.
 
 ### Stack Tecnológica
 
@@ -76,10 +70,10 @@ _EM CONSTRUCAO_
 
 ## Fluxo de Trabalho Típico
 
-1.  **Configuração:** O usuário cadastra uma "Máquina" no OrquestraFlow, fornecendo detalhes de como se conectar à sua fonte de dados.
+1.  **Configuração:** O usuário cadastra uma "Máquina" no Data Integrator, fornecendo detalhes de como se conectar à sua fonte de dados.
 2.  **Criação da Tarefa:** O usuário cria uma nova tarefa, associa-a à máquina, define um agendamento e escreve o script Python que fará a leitura e transformação.
 3.  **Criação do Integrador:** O usuário configura o destino, definindo a URL da API, o método e o formato (JSON/XML) do corpo da requisição.
-4.  **Execução:** Quando a tarefa é disparada, o backend do OrquestraFlow cria um `Job` no Kubernetes.
+4.  **Execução:** Quando a tarefa é disparada, o backend do Data Integrator cria um `Job` no Kubernetes.
 5.  **Processamento:** O Kubernetes aloca um novo Pod. Dentro dele, o script Python é executado, acessando o diretório de rede do cliente, processando os arquivos e gerando um resultado.
 6.  **Entrega:** O backend recebe o resultado do Job, formata-o conforme a configuração do integrador e faz a chamada para a API externa.
 7.  **Log:** O resultado da operação (sucesso ou falha) e os logs de execução são salvos e exibidos no dashboard.
@@ -113,7 +107,7 @@ git clone https://github.com/honokai/data-integrator.git
 
 ## Roadmap
 
-Temos grandes planos para o OrquestraFlow. Nosso roadmap futuro inclui:
+Temos grandes planos para o Data Integrator. Nosso roadmap futuro inclui:
 
 - [ ] **Construtor Visual de Fluxos (Drag-and-Drop):** Permitir a criação de fluxos de trabalho sem código.
 - [ ] **Mais Tipos de Gatilhos:** Suporte a gatilhos por Webhooks, eventos em filas (RabbitMQ/Kafka) e upload de arquivos.

@@ -1,5 +1,6 @@
 package dev.honokai.data_integrator_backend.domain.entities;
 
+import dev.honokai.data_integrator_backend.domain.enums.SourceType;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -16,6 +17,12 @@ public class Task extends Base {
     @ManyToOne
     @JoinColumn(name = "machine_id", nullable = false)
     private Machine machine;
+
+    @OneToOne(mappedBy = "task")
+    private Integrator integrator;
+
+    @Enumerated(EnumType.STRING)
+    private SourceType sourceType = SourceType.NETWORK_SHARE;
 
     @Embedded
     private FileFilter fileFilter;
@@ -98,5 +105,21 @@ public class Task extends Base {
 
     public void setSingleFile(boolean singleFile) {
         this.singleFile = singleFile;
+    }
+
+    public Integrator getIntegrator() {
+        return integrator;
+    }
+
+    public void setIntegrator(Integrator integrator) {
+        this.integrator = integrator;
+    }
+
+    public SourceType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(SourceType sourceType) {
+        this.sourceType = sourceType;
     }
 }

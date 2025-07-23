@@ -11,11 +11,6 @@ public class BaseTask implements Runnable {
         // TODO Auto-generated constructor stub
     }
 
-    public BaseTask(Task task) {
-        this.task = task;
-        System.out.println(String.format("Duration selected %d", this.task.getScanInterval()));
-    }
-
     public int getScanIntervalInSeconds() {
         return this.task.getScanInterval();
     }

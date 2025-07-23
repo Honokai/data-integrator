@@ -25,7 +25,7 @@ public class ScriptController {
         String syntaxEvaluationResult = CodeEvaluateService.evaluateCodeSyntax(codeEvaluate.getCode());
 
         return ResponseEntity.ok(
-                new CodeEvaluateResponse(syntaxEvaluationResult, syntaxEvaluationResult.length() > 0 ? false : true));
+                new CodeEvaluateResponse(syntaxEvaluationResult, syntaxEvaluationResult.length() <= 0));
     }
 
     @PostMapping("/test")
@@ -54,5 +54,10 @@ public class ScriptController {
     @PutMapping("/{scriptId}")
     public ResponseEntity<ScriptResponseDto> update(@PathVariable String scriptId, @Valid @RequestBody ScriptPostDto scriptPostDto) {
         return ResponseEntity.accepted().body(new ScriptResponseDto(scriptService.update(scriptId, scriptPostDto)));
+    }
+
+    @GetMapping("/integrator-check")
+    public void testIntegrator() {
+        System.out.println("Endpoint acessado");
     }
 }

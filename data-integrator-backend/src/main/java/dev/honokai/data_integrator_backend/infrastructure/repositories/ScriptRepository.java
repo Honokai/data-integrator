@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ScriptRepository extends JpaRepository<Script, String> {
-    public Optional<Script> findByTaskIdAndActiveTrue(String taskId);
+    Optional<Script> findByTaskIdAndActiveTrue(String taskId);
 
-    public List<Script> findByTaskId(String taskId);
+    List<Script> findByTaskId(String taskId);
 }
